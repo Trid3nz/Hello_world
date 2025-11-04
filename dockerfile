@@ -1,7 +1,14 @@
-FROM python:3.10-slim
+# Gunakan image dasar Nginx untuk menyajikan file HTML statis
+FROM nginx:alpine
 
-WORKDIR /app
+# Hapus default index page bawaan Nginx
+RUN rm -rf /usr/share/nginx/html/*
 
-COPY app.py .
+# Salin file HTML kita ke direktori web server
+COPY index.html /usr/share/nginx/html/
 
-CMD ["python", "app.py"]
+# Expose port 80 agar bisa diakses dari browser
+EXPOSE 80
+
+# Jalankan Nginx dalam mode foreground
+CMD ["nginx", "-g", "daemon off;"]

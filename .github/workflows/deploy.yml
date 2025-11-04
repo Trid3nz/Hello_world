@@ -1,0 +1,23 @@
+name: Build and Test Web App
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t simple-web-app .
+
+      - name: Run container and test response
+        run: |
+          docker run -d -p 8080:80 --name web simple-web-app
+          sleep 5
+          curl -I http://localhost:8080
